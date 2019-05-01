@@ -1,0 +1,27 @@
+{
+  "name": "reminder-bot",
+  "version": "1.0.0",
+  "description": "Discord Bot that sends reminders to user",
+  "main": "bot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/seanmksha/reminder-bot.git"
+  },
+  "keywords": [
+    "Discord",
+    "Bot",
+    "Reminder"
+  ],
+  "author": "Sean Sharma",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/seanmksha/reminder-bot/issues"
+  },
+  "homepage": "https://github.com/seanmksha/reminder-bot#readme",
+  "dependencies": {
+    "discord.js": "^11.4.2"
+  }
+}
