@@ -1,0 +1,14 @@
+{
+    "messages":
+    [
+        {
+            "allowedAuthors":[],
+            "message":"",
+            "contains":["good","morning"],
+            "case_sensitive":false,
+            "reply":false,
+            "response":"Good Morning"
+        }
+
+    ]
+}
