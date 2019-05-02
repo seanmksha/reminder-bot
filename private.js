@@ -36,7 +36,7 @@ var self = module.exports=
                 if(currentMessage.case_sensitive){
                     for(let j=0; j<currentMessage.length;++j){
                         var word = currentMessage.includes[j];
-                        if(!currentMessage.content.includes(word)){
+                        if(!message.content.includes(word)){
                             valid=false;
                             break;
                         }
@@ -44,7 +44,7 @@ var self = module.exports=
                 }
                 else{
                     //convert both to lowercase and check if they include the lowercase version of the word (case-insensitive)
-                    var lowerCaseMessage = currentMessage.content.toLowerCase();
+                    var lowerCaseMessage = message.content.toLowerCase();
                     for(let j=0; j<currentMessage.length;++j){
                         var word = currentMessage.includes[j].toLowerCase();
                         if(!lowerCaseMessage.includes(word)){
