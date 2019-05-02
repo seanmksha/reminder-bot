@@ -1,5 +1,5 @@
 var fs = require("fs");
-var content = fs.readFileSync("./privateMessage.json");
+var content = fs.readFileSync("privateMessage.json");
 var jsonContent = JSON.parse(content);
 var self = module.exports=
 {
