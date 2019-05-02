@@ -99,14 +99,13 @@ var self = module.exports={
                 throw err;
             }
             var dbo = db.db("reminders");
-            dbo.collection("reminders").find({}).toArray((err,doc)=>{
+            dbo.collection("reminders").find({}).each((err,doc)=>{
                 if (err) throw err;
                 console.log(doc);
                 var currentTime = moment().valueOf();
                 console.log(currentTime);
-                for(let i=0; i<doc.length;++i){
-                    var timestamp = doc.time;
-                    var record = doc[i];
+                var timestamp = doc.time;
+                var record = doc[i];
                     
                     if(timestamp<=currentTime){
                         console.log("hit time, time to remind");
@@ -122,8 +121,8 @@ var self = module.exports={
                         db.close();
                     }
                 }
-            });
-        });
-    }
-
+           
+        );
+    });
+}
 }
