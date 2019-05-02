@@ -83,7 +83,7 @@ var self = module.exports={
                     time: moment().add(hour,'hours').add(minute,'minutes').add(second,'seconds').valueOf(),
                     userId: message.member.user.id
                 };
-                dbo.collection("reminders").insertOne(myobj,(err,db)=>{
+                dbo.collection("reminders").insertOne(myobj,(err,res)=>{
                     if (err)throw err;
                     console.log("successfully added reminder");
                     db.close();
