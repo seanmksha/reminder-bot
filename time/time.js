@@ -19,6 +19,9 @@ var self = module.exports={
                         continue;
                     }
                     hour=res[i-1];
+                    if(res[i-1]=="a"){
+                        hour=1;
+                    }
                     break;
                 }
             }
@@ -29,6 +32,9 @@ var self = module.exports={
                         continue;
                     }
                     minute=res[i-1];
+                    if(res[i-1]=="a"){
+                        minute=1;
+                    }
                     break;
                 }
             }
@@ -39,6 +45,9 @@ var self = module.exports={
                         continue;
                     }
                     second=res[i-1];
+                    if(res[i-1]=="a"){
+                        second=1;
+                    }
                     break;
                 }
             }
