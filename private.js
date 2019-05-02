@@ -23,17 +23,17 @@ var self = module.exports=
             }
             //checks to see if the message has to be case-sensitive, or if it only needs to contain certain words
             if(currentMessage.contains.length==0){
-                if(currentMessage.case-sensitive && currentMessage.message!=message.content){
+                if(currentMessage.case_sensitive && currentMessage.message!=message.content){
                     continue;
                 }
-                else if(!messages[i].case-sensitive && message.content.toLowerCase()!=messages[i].message.toLowerCase()){
+                else if(!currentMessage.case_sensitive && message.content.toLowerCase()!=currentMessage.message.toLowerCase()){
                     continue;
                 }
             }
             else{
                 //Check if the message includes all words
                 var valid=true;
-                if(currentMessage.case-sensitive){
+                if(currentMessage.case_sensitive){
                     for(let j=0; j<currentMessage.length;++j){
                         var word = currentMessage.includes[j];
                         if(!currentMessage.content.includes(word)){
@@ -57,12 +57,11 @@ var self = module.exports=
                     continue;
                 }
             }
-            
             if(messages[i].reply){
-                message.reply(messages[i].response);
+                message.reply(currentMessage.response);
             }
             else{
-                message.channel.send(messages[i].response);
+                message.channel.send(currentMessage.response);
             }
 
 
