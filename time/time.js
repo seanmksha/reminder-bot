@@ -99,7 +99,7 @@ var self = module.exports={
                 throw err;
             }
             var dbo = db.db("reminders");
-            dbo.collection("reminders").find({},(err,doc)=>{
+            dbo.collection("reminders").find({}).toArray((err,doc)=>{
                 if (err) throw err;
                 for(let i=0; i<doc.length;++i){
                     var timestamp = doc.time;
