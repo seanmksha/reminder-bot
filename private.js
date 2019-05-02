@@ -24,11 +24,9 @@ var self = module.exports=
             //checks to see if the message has to be case-sensitive, or if it only needs to contain certain words
             if(currentMessage.contains.length==0){
                 if(currentMessage.case_sensitive && currentMessage.message!=message.content){
-                    console.log("line 27");
                     continue;
                 }
                 else if(!currentMessage.case_sensitive && message.content.toLowerCase()!=currentMessage.message.toLowerCase()){
-                    console.log("line 31");
                     continue;
                 }
             }

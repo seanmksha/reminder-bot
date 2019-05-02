@@ -7,11 +7,12 @@ const private = require("./private.js");
 
 
 client.on("message", message => {
-    if(message.content == "Hi Bot"){
-        message.channel.send("Hello World");
-    }
-    else if(message.content == "Hello Bot" ){
-        message.reply("Hello "+message.member.toString()+"!");
+    var lowercase = message.content.toLowerCase();
+    if(lowercase.includes("what")&& lowercase.includes("time") && lowercase.includes("is") && lowercase.includes("it")){
+       var date = new Date();
+       var hour = date.getHours();
+       var minute = date.getMinutes();
+       message.channel.send(hour+":"+minute);
     }
     //From private.js
     private.reply(message);
