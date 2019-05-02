@@ -63,6 +63,7 @@ var self = module.exports=
             else{
                 message.channel.send(currentMessage.response);
             }
+            break;
         }
 }
 };
