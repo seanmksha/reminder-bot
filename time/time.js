@@ -70,9 +70,9 @@ var self = module.exports={
                 }
 
             }
-            event.replace(new RegExp("my",'g'),"your");
+            event.split("my").join("your");
             event=event.trim();
-            message.channel.send("Need to set reminder to " +event+" for "+ hour+" hours,  "+minute+" minutes, and "+second+" seconds from now. (Not implemented yet)");
+            message.channel.send("Need to set reminder to \"" +event+"\" for "+ hour+" hours,  "+minute+" minutes, and "+second+" seconds from now. (Not implemented yet)");
             /*MongoClient.connect(url,(err,db)=>{
                 if(err){
                     throw err;
