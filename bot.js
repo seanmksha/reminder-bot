@@ -14,7 +14,7 @@ client.on("message", message => {
         message.reply("Hello "+message.member.toString()+"!");
     }
     //From private.js
-    exports.reply(message);
+    module.exports.reply(message);
 });
 
 client.login(key);
