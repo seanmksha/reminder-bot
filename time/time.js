@@ -70,7 +70,7 @@ var self = module.exports={
                 }
 
             }
-            event.split("my").join("your");
+            event=event.split("my").join("your");
             event=event.trim();
             message.channel.send("Need to set reminder to \"" +event+"\" for "+ hour+" hours,  "+minute+" minutes, and "+second+" seconds from now. (Not implemented yet)");
             /*MongoClient.connect(url,(err,db)=>{
