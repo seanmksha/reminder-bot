@@ -101,6 +101,7 @@ var self = module.exports={
             var dbo = db.db("reminders");
             dbo.collection("reminders").find({}).each((err,doc)=>{
                 if (err) throw err;
+                if(doc==null)return;
                 console.log(doc);
                 var currentTime = moment().valueOf();
                 console.log(currentTime);
