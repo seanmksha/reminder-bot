@@ -98,7 +98,7 @@ var self = module.exports={
                 throw err;
             }
             var dbo = db.db("reminders");
-            dbo.collection("reminders").find().sort({time:1}).limit(1).exec((err,doc)=>{
+            dbo.collection("reminders").find().sort({time:1}).limit(1)({},(err,doc)=>{
                 if (err) throw err;
                 console.log(doc);
                 for(let i=0; i<doc.length;++i){
