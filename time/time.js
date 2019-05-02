@@ -51,6 +51,9 @@ var self = module.exports={
                     break;
                 }
             }
+            if(lowercase.includes("tomorrow")){
+                hour=24;
+            }
             message.channel.send("Need to set reminder for "+ hour+" hours,  "+minute+" minutes, and "+second+" seconds from now. (Not implemented yet)");
         }
 
