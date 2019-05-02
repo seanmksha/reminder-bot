@@ -115,7 +115,7 @@ var self = module.exports={
                             console.log("1 document deleted");
                             db.close();
                         });
-                        break;
+                        
                     }
                     else{
                         db.close();
