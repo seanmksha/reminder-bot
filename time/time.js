@@ -3,7 +3,7 @@ const moment = require("moment-timezone");
 const MongoClient = require('mongodb').MongoClient;
 const url = "mongodb://localhost:27017/reminders";
 var self = module.exports={
-    main:function(message,client,){
+    main:function(message,client){
         var lowercase = message.content.toLowerCase();
         if(lowercase.includes("what")&& lowercase.includes("time")&&
         lowercase.includes("is")&& lowercase.includes("it")){
@@ -72,18 +72,54 @@ var self = module.exports={
             }
             event=event.split("my").join("your");
             event=event.trim();
-            message.channel.send("Need to set reminder to \"" +event+"\" for "+ hour+" hours,  "+minute+" minutes, and "+second+" seconds from now. (Not implemented yet)");
-            /*MongoClient.connect(url,(err,db)=>{
+            message.channel.send("Set reminder to \"" +event+"\" for "+ hour+" hours,  "+minute+" minutes, and "+second+" seconds from now. (Not implemented yet)");
+            MongoClient.connect(url,(err,db)=>{
                 if(err){
                     throw err;
                 }
                 var dbo = db.db("reminders");
                 var myobj = {
-                    event: ,
-                    time: moment().add(hour,'hours').add(minute,'minutes').add(second,'seconds')
-                }
-            });*/
+                    description: event,
+                    time: moment().add(hour,'hours').add(minute,'minutes').add(second,'seconds').valueOf(),
+                    userId: message.member.user.id
+                };
+                dbo.collection("reminders").insertOne(myobj,(err,db)=>{
+                    if (err)throw err;
+                    db.close();
+                });
+            });
         }
 
+    },
+
+    pollTimestamp: function(client){
+        MongoClient.connect(url,(err,db)=>{
+            if(err){
+                throw err;
+            }
+            var dbo = db.db("reminders");
+            dbo.collection("reminders").find().sort({time:1}).limit(1).exec((err,doc)=>{
+                if (err) throw err;
+                console.log(doc);
+                for(let i=0; i<doc.length;++i){
+                    var timestamp = doc.time;
+                    var currentTime = moment().valueOf();
+                    var record = doc[i];
+                    if(timestamp>=currentTime){
+                        console.log("hit time, time to remind");
+                        client.users.get(record.userId).send("Reminder: @"+record.userId+" : You have to "+record.description);
+                        dbo.collection("reminders").deleteOne({description:record.description},(err,obj)=>{
+                            if(err)throw err;
+                            console.log("1 document deleted");
+                            db.close();
+                        });
+                    }
+                    else{
+                        db.close();
+                    }
+                }
+            });
+        });
     }
+
 }
