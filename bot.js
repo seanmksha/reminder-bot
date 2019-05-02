@@ -13,6 +13,8 @@ client.on("message", message => {
     else if(message.content == "Hello Bot" ){
         message.reply("Hello "+message.member.toString()+"!");
     }
+    //From private.js
+    exports.reply();
 });
 
 client.login(key);
