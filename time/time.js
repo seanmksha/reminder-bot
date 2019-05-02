@@ -38,7 +38,7 @@ var self = module.exports={
                     if(i==0){
                         continue;
                     }
-                    minute=res[i-1];
+                    second=res[i-1];
                     break;
                 }
             }
