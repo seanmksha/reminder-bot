@@ -34,8 +34,8 @@ var self = module.exports=
                 //Check if the message includes all words
                 var valid=true;
                 if(currentMessage.case_sensitive){
-                    for(let j=0; j<currentMessage.length;++j){
-                        var word = currentMessage.includes[j];
+                    for(let j=0; j<currentMessage.contains.length;++j){
+                        var word = currentMessage.contains[j];
                         if(!message.content.includes(word)){
                             valid=false;
                             break;
@@ -45,8 +45,8 @@ var self = module.exports=
                 else{
                     //convert both to lowercase and check if they include the lowercase version of the word (case-insensitive)
                     var lowerCaseMessage = message.content.toLowerCase();
-                    for(let j=0; j<currentMessage.length;++j){
-                        var word = currentMessage.includes[j].toLowerCase();
+                    for(let j=0; j<currentMessage.contains.length;++j){
+                        var word = currentMessage.contains[j].toLowerCase();
                         if(!lowerCaseMessage.includes(word)){
                             valid=false;
                             break;
@@ -63,9 +63,6 @@ var self = module.exports=
             else{
                 message.channel.send(currentMessage.response);
             }
-
-
-
         }
 }
 };
