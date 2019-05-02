@@ -18,7 +18,7 @@ var self = module.exports=
                     break;
                 }
             }
-            if(!allowed){
+            if(users.length!=0 && !allowed){
                 continue;
             }
             //checks to see if the message has to be case-sensitive, or if it only needs to contain certain words
