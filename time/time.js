@@ -58,18 +58,19 @@ var self = module.exports={
             let found = false;
             var event = "";
             for(let i=0; i<res.length;++i){
+                
+                if(res[i].includes("in")|| res[i]){
+                    found=false;
+                }
                 if(found){
                     event= event+ res[i] + " ";
                 }
-                if(res[i].includes("in")){
-                    found=false;
-                }
-
                 if(res[i].includes("to")){
                     found=true;
                 }
 
             }
+            event=event.trim();
             message.channel.send("Need to set reminder to " +event+" for "+ hour+" hours,  "+minute+" minutes, and "+second+" seconds from now. (Not implemented yet)");
             /*MongoClient.connect(url,(err,db)=>{
                 if(err){
