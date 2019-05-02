@@ -3,7 +3,7 @@ var content = fs.readFileSync("./casual_messages/privateMessage.json");
 var jsonContent = JSON.parse(content);
 var self = module.exports=
 {
-    reply:function (message){
+    reply:function (message,client){
         if(message.author.id==client.user.id){
             return;
         }

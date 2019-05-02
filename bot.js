@@ -10,7 +10,7 @@ setInterval(time.pollTimestamp,1000,client);
 client.on("message", message => {
     var lowercase = message.content.toLowerCase();
     time.main(message,client);
-    private.reply(message);
+    private.reply(message,client);
 });
 
 client.on("guildMemberAdd", member=>{
