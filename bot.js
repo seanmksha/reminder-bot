@@ -7,6 +7,9 @@ client.on("message", message => {
     if(message.content == "Hi Bot"){
         message.reply("Hello World");
     }
+    else if(message.content == "Hello Bot" ){
+        message.reply("Hello "+message.member.toString()+"!");
+    }
 });
 
 client.login(key);
