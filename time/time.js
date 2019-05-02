@@ -85,6 +85,7 @@ var self = module.exports={
                 };
                 dbo.collection("reminders").insertOne(myobj,(err,db)=>{
                     if (err)throw err;
+                    console.log("successfully added reminder");
                     db.close();
                 });
             });
@@ -100,7 +101,6 @@ var self = module.exports={
             var dbo = db.db("reminders");
             dbo.collection("reminders").find({},(err,doc)=>{
                 if (err) throw err;
-                console.log(doc);
                 for(let i=0; i<doc.length;++i){
                     var timestamp = doc.time;
                     var currentTime = moment().valueOf();
