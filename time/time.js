@@ -59,7 +59,7 @@ var self = module.exports={
             var event = "";
             for(let i=0; i<res.length;++i){
                 
-                if(res[i].includes("in")|| res[i]){
+                if(res[i].includes("in")){
                     found=false;
                 }
                 if(found){
