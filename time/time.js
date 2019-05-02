@@ -98,7 +98,7 @@ var self = module.exports={
                 throw err;
             }
             var dbo = db.db("reminders");
-            dbo.collection("reminders").find().sort({time:1})((err,doc)=>{
+            dbo.collection("reminders").find({},(err,doc)=>{
                 if (err) throw err;
                 console.log(doc);
                 for(let i=0; i<doc.length;++i){
@@ -113,6 +113,7 @@ var self = module.exports={
                             console.log("1 document deleted");
                             db.close();
                         });
+                        break;
                     }
                     else{
                         db.close();
