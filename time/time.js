@@ -101,10 +101,12 @@ var self = module.exports={
             var dbo = db.db("reminders");
             dbo.collection("reminders").find({}).toArray((err,doc)=>{
                 if (err) throw err;
+                console.log(doc);
                 for(let i=0; i<doc.length;++i){
                     var timestamp = doc.time;
                     var currentTime = moment().valueOf();
                     var record = doc[i];
+                    
                     if(timestamp>=currentTime){
                         console.log("hit time, time to remind");
                         client.users.get(record.userId).send("Reminder: @"+record.userId+" : You have to "+record.description);
