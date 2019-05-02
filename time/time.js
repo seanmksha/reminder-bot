@@ -106,7 +106,7 @@ var self = module.exports={
                     var timestamp = doc.time;
                     var currentTime = moment().valueOf();
                     var record = doc[i];
-                    
+                    console.log(currentTime);
                     if(timestamp<=currentTime){
                         console.log("hit time, time to remind");
                         client.users.get(record.userId).send("Reminder: @"+record.userId+" : You have to "+record.description);
