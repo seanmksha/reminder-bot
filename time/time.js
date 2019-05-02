@@ -1,8 +1,9 @@
 
 const moment = require("moment-timezone");
-
+const MongoClient = require('mongodb').MongoClient;
+const url = "mongodb://localhost:27017/reminders";
 var self = module.exports={
-    main:function(message,client){
+    main:function(message,client,){
         var lowercase = message.content.toLowerCase();
         if(lowercase.includes("what")&& lowercase.includes("time")&&
         lowercase.includes("is")&& lowercase.includes("it")){
@@ -54,7 +55,32 @@ var self = module.exports={
             if(lowercase.includes("tomorrow")){
                 hour=24;
             }
-            message.channel.send("Need to set reminder for "+ hour+" hours,  "+minute+" minutes, and "+second+" seconds from now. (Not implemented yet)");
+            let found = false;
+            var event = "";
+            for(let i=0; i<res.length;++i){
+                if(found){
+                    event= event+ res[i] + " ";
+                }
+                if(res[i].includes("in")){
+                    found=false;
+                }
+
+                if(res[i].includes("to")){
+                    found=true;
+                }
+
+            }
+            message.channel.send("Need to set reminder to " +event+" for "+ hour+" hours,  "+minute+" minutes, and "+second+" seconds from now. (Not implemented yet)");
+            /*MongoClient.connect(url,(err,db)=>{
+                if(err){
+                    throw err;
+                }
+                var dbo = db.db("reminders");
+                var myobj = {
+                    event: ,
+                    time: moment().add(hour,'hours').add(minute,'minutes').add(second,'seconds')
+                }
+            });*/
         }
 
     }
