@@ -107,7 +107,7 @@ var self = module.exports={
                     var currentTime = moment().valueOf();
                     var record = doc[i];
                     
-                    if(timestamp>=currentTime){
+                    if(timestamp<=currentTime){
                         console.log("hit time, time to remind");
                         client.users.get(record.userId).send("Reminder: @"+record.userId+" : You have to "+record.description);
                         dbo.collection("reminders").deleteOne({description:record.description},(err,obj)=>{
