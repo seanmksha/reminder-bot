@@ -8,8 +8,15 @@ const time = require("./time/time.js");
 
 client.on("message", message => {
     var lowercase = message.content.toLowerCase();
-    time.main(message);
+    time.main(message,client);
     private.reply(message);
 });
+
+client.on("guildMemberAdd", member=>{
+    const channel = member.guild.channels.find(ch=>ch.name === 'public');
+    if(!channel)return;
+    channel.send(`Welcome to the server, ${member}`);
+});
+
 
 client.login(key);
