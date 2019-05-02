@@ -72,7 +72,7 @@ var self = module.exports={
             }
             event=event.split("my").join("your");
             event=event.trim();
-            message.channel.send("Set reminder to \"" +event+"\" for "+ hour+" hours,  "+minute+" minutes, and "+second+" seconds from now. (Not implemented yet)");
+            message.channel.send("Set reminder to \"" +event+"\" for "+ hour+" hours,  "+minute+" minutes, and "+second+" seconds from now.");
             MongoClient.connect(url,(err,db)=>{
                 if(err){
                     throw err;

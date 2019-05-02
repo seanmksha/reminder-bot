@@ -4,9 +4,6 @@ var jsonContent = JSON.parse(content);
 var self = module.exports=
 {
     reply:function (message,client){
-        if(message.author.id==client.user.id || message.member==null){
-            return;
-        }
         var messages = jsonContent.messages;
         for(let i=0; i< messages.length;++i){
             //if any conditions are false continue to check the next message
