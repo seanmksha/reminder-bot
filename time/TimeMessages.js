@@ -64,7 +64,11 @@ module.exports= class TimeMessages extends Handler{
             }
         }
         if(foundBoth&& pos <res.length){
-            var hol = moment().holiday(res[pos]);
+            var testHoliday = res[pos];
+            if(testHoliday.charAt(testHoliday.length()-1)=="?"){
+                testHoliday=testHoliday.slice(0,-1);
+            }
+            var hol = moment().holiday(testHoliday);
             if(hol!=false){
                 var now = moment();
                 message.channel.send(hol.isHoliday()+" is on "+hol.format("MMMM Do YYYY")+" or in "+ (hol.diff(now, 'days')+1)+" days."); 
@@ -73,6 +77,7 @@ module.exports= class TimeMessages extends Handler{
         }
         return false;
     }
+   
     pollTimestamp(backupURL){
         if(this.dbo==null){
             
