@@ -130,6 +130,10 @@ module.exports= class CustomMessages extends Handler{
             else{
                 message.channel.send(currentMessage.response[value]);
             }
+            if(currentMessage.react.length>0){
+                const idx = this.random.integer(0,currentMessage.react.length-1);
+                message.react(currentMessage.react[idx]);
+            }
             break;
         }
     }
