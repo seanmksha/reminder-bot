@@ -1,13 +1,16 @@
-var fs = require("fs");
-var content = fs.readFileSync("./casual_messages/privateMessage.json");
-var jsonContent = JSON.parse(content);
-var self = module.exports=
-{
-    reply:function (message,client){
-        var messages = jsonContent.messages;
+
+module.exports= class CustomMessages{
+    constructor(client,directory){
+        this.client=client;
+        this.fs = require("fs");
+        this.content = this.fs.readFileSync(directory);
+        this.jsonContent = JSON.parse(this.content);
+    }
+    processChat(message){
+        var messages = this.jsonContent.messages;
+        var client = this.client;
         for(let i=0; i< messages.length;++i){
             //if any conditions are false continue to check the next message
-            
             var currentMessage = messages[i];
             var users = currentMessage.allowedAuthors;
             var allowed = false;
@@ -65,5 +68,5 @@ var self = module.exports=
             }
             break;
         }
-}
+    }
 };

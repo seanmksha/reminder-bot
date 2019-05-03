@@ -1,3 +1,5 @@
+var queue = [];
+var playing = false;
 var self = module.exports=
 {
     chat:function (message,client){
@@ -15,6 +17,9 @@ var self = module.exports=
     // Oh no, it errored! Let's log it to console :)
             console.error(e);
             });
+        }
+        else if(lowercase.includes("!play")){
+            var args= lowercase.split(" ");
         }
        
     }
