@@ -25,7 +25,7 @@ module.exports = class AdminHandler extends Handler{
            this.customMessages.forEach((custom)=>
                 custom.reloadContent()
            );
-           message.channel.send("Yes, sir! Reloading Messages");
+           message.channel.send("Reloading Messages");
            return;     
             }
            
