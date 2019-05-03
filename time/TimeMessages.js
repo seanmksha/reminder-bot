@@ -5,6 +5,17 @@ module.exports= class TimeMessages{
     constructor(client,mongoURL){
         this.url=mongoURL;
         this.client=client;
+        MongoClient.connect(this.url,(err,db)=>{
+            if(err){
+                throw err;
+            }
+            
+            this.dbo = db.db("reminders");
+            var that = this;
+            setInterval(function(){
+               return that.pollTimestamp();
+            },1000,this.url);
+        });
     }
     processChat(message){
         var client = this.client;
@@ -20,44 +31,41 @@ module.exports= class TimeMessages{
         }
     }
     pollTimestamp(backupURL){
-        var client = this.client;
-        var url = this.url;
-        if(url==null){
-            this.url=backupURL;
-            url=backupURL;
-            console.log(url);
+        if(this.dbo==null){
+            
+            MongoClient.connect(backupURL,(err,db)=>{
+                if(err){
+                    throw err;
+                }
+                
+                this.dbo = db.db("reminders");
+            });
+            return;
         }
-        MongoClient.connect(url,(err,db)=>{
-            if(err){
-                throw err;
-            }
-            var dbo = db.db("reminders");
-            dbo.collection("reminders").find({}).forEach((err,doc)=>{
-                if (err) throw err;
+        var client = this.client;
+        this.dbo.collection("reminders").find().each((err,doc)=>{
+        
                 if(doc==null)return;
-                console.log(doc);
+                
                 var currentTime = moment().valueOf();
-                console.log(currentTime);
+                
                 var timestamp = doc.time;
                 var record = doc;
                     
                     if(timestamp<=currentTime){
                         console.log("hit time, time to remind");
                         client.users.get(record.userId).send("Reminder: <@"+record.userId+"> : You have to "+record.description);
-                        dbo.collection("reminders").deleteOne({_id:record._id},(err,obj)=>{
+                        this.dbo.collection("reminders").deleteOne({_id:record._id},(err,obj)=>{
                             if(err)throw err;
                             console.log("1 document deleted");
-                            db.close();
+                            
                         });
                         
                     }
-                    else{
-                        db.close();
-                    }
+                    
                 }
            
         );
-     });
     }
     
     setupReminder(message,lowercase){
@@ -128,21 +136,14 @@ module.exports= class TimeMessages{
     insertReminder(message,hour, minute, second, event){
         var client = this.client;
         var url = this.url;
-        MongoClient.connect(url,(err,db)=>{
-            if(err){
-                throw err;
-            }
-            var dbo = db.db("reminders");
-            var myobj = {
+        var myobj = {
                 description: event,
                 time: moment().add(hour,'hours').add(minute,'minutes').add(second,'seconds').valueOf(),
                 userId: message.member.user.id
             };
-            dbo.collection("reminders").insertOne(myobj,(err,res)=>{
-                if (err)throw err;
-                console.log("successfully added reminder");
-                db.close();
-            });
+        this.dbo.collection("reminders").insertOne(myobj,(err,res)=>{
+            if (err)throw err;
+            console.log("successfully added reminder");
         });
     }
     
