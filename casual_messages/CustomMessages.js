@@ -24,6 +24,10 @@ module.exports= class CustomMessages extends Handler{
             var currentMessage = messages[i];
             var users = currentMessage.allowedAuthors;
             var allowed = false;
+            //check if mention
+            if(!message.isMentioned(client.user)&& currentMessage.mention){
+                continue;
+            }
             //check if the user is listed as allowed to respond to, an empty allowed list means that the message could have been sent by anyone
             for(let j=0; j< users.length;++j){
                 if(users[j]==message.member.user.id){
