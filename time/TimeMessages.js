@@ -1,5 +1,6 @@
 
 const moment = require("moment-timezone");
+
 const MongoClient = require('mongodb').MongoClient;
 module.exports= class TimeMessages{
     constructor(client,mongoURL){
@@ -23,12 +24,19 @@ module.exports= class TimeMessages{
         lowercase.includes("is")&& lowercase.includes("it")){
             message.channel.send(moment().tz("America/Los_Angeles").format("h:mm  A")+" PDT");
             message.channel.send(moment().tz("America/New_York").format("h:mm  A")+" EST");
+            return;
         }
         let user = message.mentions.users.first();
         if(message.isMentioned(client.user)&& lowercase.includes("remind")&&lowercase.includes("me")){
             this.setupReminder(message,lowercase);
+            return;
         }
+        if(message.isMentioned(client.user)&& lowercase.includes("next") && lowercase.includes("holiday")){
+
+        }
+        
     }
+
     pollTimestamp(backupURL){
         if(this.dbo==null){
             
