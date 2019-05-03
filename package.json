@@ -22,10 +22,10 @@
   },
   "homepage": "https://github.com/seanmksha/reminder-bot#readme",
   "dependencies": {
-    "aiml": "0.0.2",
     "discord.js": "^11.4.2",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.25",
-    "mongodb": "^3.2.3"
+    "mongodb": "^3.2.3",
+    "random-js": "^2.0.0"
   }
 }

@@ -1,10 +1,11 @@
-
+import {Random} from "random-js";
 module.exports= class CustomMessages{
     constructor(client,directory){
         this.client=client;
         this.fs = require("fs");
         this.content = this.fs.readFileSync(directory);
         this.jsonContent = JSON.parse(this.content);
+        this.random = new Random();
     }
     processChat(message){
         var messages = this.jsonContent.messages;
@@ -60,11 +61,12 @@ module.exports= class CustomMessages{
                     continue;
                 }
             }
+            const value = this.random.integer(0,messages[i].reply.length-1);
             if(messages[i].reply){
-                message.reply(currentMessage.response);
+                message.reply(currentMessage.response[value]);
             }
             else{
-                message.channel.send(currentMessage.response);
+                message.channel.send(currentMessage.response[value]);
             }
             break;
         }

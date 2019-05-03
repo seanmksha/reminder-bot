@@ -11,10 +11,9 @@ module.exports= class TimeMessages{
             }
             
             this.dbo = db.db("reminders");
-            var that = this;
-            setInterval(function(){
-               return that.pollTimestamp();
-            },1000,this.url);
+            setInterval(()=>
+                this.pollTimestamp()
+            ,1000,this.url);
         });
     }
     processChat(message){
