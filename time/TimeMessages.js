@@ -16,7 +16,7 @@ module.exports= class TimeMessages{
         }
         let user = message.mentions.users.first();
         if(message.isMentioned(client.user)&& lowercase.includes("remind")&&lowercase.includes("me")){
-            this.setupReminder(message);
+            this.setupReminder(message,lowercase);
         }
     }
     pollTimestamp(backupURL){
@@ -60,7 +60,7 @@ module.exports= class TimeMessages{
      });
     }
     
-    setupReminder(lowercase){
+    setupReminder(message,lowercase){
         var res = lowercase.split(" ");
         let hour = 0;
         for(let i=0; i<res.length;++i){
@@ -122,10 +122,10 @@ module.exports= class TimeMessages{
         event=event.split("my").join("your");
         event=event.trim();
         message.channel.send("Set reminder to \"" +event+"\" for "+ hour+" hours,  "+minute+" minutes, and "+second+" seconds from now.");
-        this.insertReminder(hour,minute,second,event);
+        this.insertReminder(message,hour,minute,second,event);
     }
     
-    insertReminder(hour, minute, second, event){
+    insertReminder(message,hour, minute, second, event){
         var client = this.client;
         var url = this.url;
         MongoClient.connect(url,(err,db)=>{
