@@ -24,6 +24,7 @@
   "dependencies": {
     "discord.js": "^11.4.2",
     "moment": "^2.24.0",
+    "moment-holiday": "^1.5.1",
     "moment-timezone": "^0.5.25",
     "mongodb": "^3.2.3",
     "random-js": "^2.0.0"

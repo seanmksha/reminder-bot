@@ -1,5 +1,6 @@
 
 const moment = require("moment-timezone");
+const moment2 = require("moment-holiday");
 const Handler = require("../handler.js");
 const MongoClient = require('mongodb').MongoClient;
 module.exports= class TimeMessages extends Handler{
@@ -32,7 +33,36 @@ module.exports= class TimeMessages extends Handler{
             return;
         }
         if(message.isMentioned(client.user)&& lowercase.includes("next") && lowercase.includes("holiday")){
-
+            var hol = moment().nextHoliday(1,false);
+            var now = moment();
+            message.channel.send(hol.isHoliday()+" on "+hol.format("MMMM Do YYYY")+" or in "+ (hol.diff(now, 'days')+1)+" days.");
+            return;
+        }
+        if(lowercase.includes("when is")){
+            var res = lowercase.split(" ");
+            var foundWhen = false;
+            var foundBoth = false;
+            var pos = 0;
+            for(let i=0; i<res.length;++i){
+                if(foundWhen && res[i]=="is"){
+                    pos=i+1;
+                    foundBoth=true;
+                    break;
+                }
+                if(res[i]=="when"){
+                    foundWhen=true;
+                }
+                else{
+                    foundWhen=false;
+                }
+            }
+            if(foundBoth&& pos <res.length){
+                var hol = moment().holiday(res[pos]);
+                if(hol!=false){
+                    var now = moment();
+                    message.channel.send(hol.isHoliday()+" is on "+hol.format("MMMM Do YYYY")+" or in "+ (hol.diff(now, 'days')+1)+" days."); 
+                }
+            }
         }
         
     }
