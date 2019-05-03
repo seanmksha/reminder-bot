@@ -157,7 +157,7 @@ module.exports= class TimeMessages extends Handler{
     setupHolidayReminder(message,res,lowercase,containsBefore,holiday, holidayName){
         let found = false;
         var event = "";
-        holiday.subtract("12","hours");
+        holiday.subtract("5","hours");
         for(let i=0; i<res.length;++i){
             if(res[i].includes("on")||res[i].includes("in")){
                 found=false;
