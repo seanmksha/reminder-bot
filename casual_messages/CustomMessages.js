@@ -61,7 +61,7 @@ module.exports= class CustomMessages{
                     continue;
                 }
             }
-            const value = this.random.integer(0,messages[i].reply.length-1);
+            const value = this.random.integer(0,currentMessage.response.length-1);
             if(messages[i].reply){
                 message.reply(currentMessage.response[value]);
             }
