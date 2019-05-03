@@ -1,12 +1,21 @@
-module.exports= class CustomMessages{
+const Handler = require("../handler.js");
+module.exports= class CustomMessages extends Handler{
     constructor(client,directory){
+        super(client);
         const {Random} = require("random-js");
         this.client=client;
         this.fs = require("fs");
+        this.directory=directory;
         this.content = this.fs.readFileSync(directory);
         this.jsonContent = JSON.parse(this.content);
         this.random = new Random();
     }
+    reloadContent(){
+        this.content = this.fs.readFileSync(this.directory);
+        this.jsonContent = JSON.parse(this.content);
+        console.log("Commands Reloaded");
+    }
+
     processChat(message){
         var messages = this.jsonContent.messages;
         var client = this.client;

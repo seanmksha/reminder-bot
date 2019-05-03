@@ -1,11 +1,11 @@
 
 const moment = require("moment-timezone");
-
+const Handler = require("../handler.js");
 const MongoClient = require('mongodb').MongoClient;
-module.exports= class TimeMessages{
+module.exports= class TimeMessages extends Handler{
     constructor(client,mongoURL){
+        super(client);
         this.url=mongoURL;
-        this.client=client;
         MongoClient.connect(this.url,(err,db)=>{
             if(err){
                 throw err;
