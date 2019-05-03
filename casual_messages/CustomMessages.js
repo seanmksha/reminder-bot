@@ -1,6 +1,6 @@
-import {Random} from "random-js";
 module.exports= class CustomMessages{
     constructor(client,directory){
+        const {Random} = require("random-js");
         this.client=client;
         this.fs = require("fs");
         this.content = this.fs.readFileSync(directory);
