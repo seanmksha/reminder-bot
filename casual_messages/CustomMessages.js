@@ -23,6 +23,8 @@ module.exports= class CustomMessages extends Handler{
         (url.indexOf("jpeg",url.length-"jpeg".length)!==-1));
     }
 
+    
+
     processChat(message){
         var messages = this.jsonContent.messages;
         var client = this.client;

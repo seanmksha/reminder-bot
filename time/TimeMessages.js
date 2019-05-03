@@ -10,8 +10,7 @@ module.exports= class TimeMessages extends Handler{
         MongoClient.connect(this.url,(err,db)=>{
             if(err){
                 throw err;
-            }
-            
+            }    
             this.dbo = db.db("reminders");
             setInterval(()=>
                 this.pollTimestamp()
@@ -65,9 +64,9 @@ module.exports= class TimeMessages extends Handler{
         }
         if(foundBoth&& pos <res.length){
             var testHoliday = res[pos];
-            if(testHoliday.charAt(testHoliday.length()-1)=="?"){
-                testHoliday=testHoliday.slice(0,-1);
-            }
+            //if(testHoliday.charAt(testHoliday.length()-1)=="?"){
+              //  testHoliday=testHoliday.slice(0,-1);
+            //}
             var hol = moment().holiday(testHoliday);
             if(hol!=false){
                 var now = moment();
@@ -118,53 +117,49 @@ module.exports= class TimeMessages extends Handler{
     
     setupReminder(message,lowercase){
         var res = lowercase.split(" ");
-        let hour = 0;
+        //check for holiday
+        var isHolidayReminder = false;
+        var containsBefore = false;
+        var containsDayBefore = false;
+        var holidayName="";
+        /*  var hol = moment().holiday(testHoliday);
+            if(hol!=false){
+                var now = moment();
+                message.channel.send(hol.isHoliday()+" is on "+hol.format("MMMM Do YYYY")+" or in "+ (hol.diff(now, 'days')+1)+" days."); 
+            }
+            return true;
+        */
+       var holiday;
         for(let i=0; i<res.length;++i){
-            if(res[i].includes("hour")){
-                if(i==0){
-                    continue;
-                }
-                hour=res[i-1];
-                if(res[i-1]=="a"){
-                    hour=1;
-                }
-                break;
+            var word = res[i];
+            var hol = moment().holiday(word);
+            if(hol!==false && word!=="day"){
+                console.log(hol);
+                holidayName=hol.isHoliday();
+                isHolidayReminder=true;
+                holiday=hol;
+            }
+            if(word=="before"){
+                containsBefore=true;
+            }
+            if(word=="day"){
+                containsDayBefore=true;
             }
         }
-        let minute = 0;
-        for(let i=0; i<res.length;++i){
-            if(res[i].includes("minute")){
-                if(i==0){
-                    continue;
-                }
-                minute=res[i-1];
-                if(res[i-1]=="a"){
-                    minute=1;
-                }
-                break;
-            }
+        if(!isHolidayReminder)
+        {
+           this.setupRelativeReminder(message,res,lowercase);
         }
-        let second = 0;
-        for(let i=0; i<res.length;++i){
-            if(res[i].includes("second")){
-                if(i==0){
-                    continue;
-                }
-                second=res[i-1];
-                if(res[i-1]=="a"){
-                    second=1;
-                }
-                break;
-            }
+        else{
+            this.setupHolidayReminder(message,res,lowercase,containsBefore,holiday,holidayName);
         }
-        if(lowercase.includes("tomorrow")){
-            hour=24;
-        }
+    }
+    setupHolidayReminder(message,res,lowercase,containsBefore,holiday, holidayName){
         let found = false;
         var event = "";
+        holiday.subtract("12","hours");
         for(let i=0; i<res.length;++i){
-            
-            if(res[i].includes("in")){
+            if(res[i].includes("on")||res[i].includes("in")){
                 found=false;
             }
             if(found){
@@ -173,14 +168,93 @@ module.exports= class TimeMessages extends Handler{
             if(res[i].includes("to")){
                 found=true;
             }
-
         }
         event=event.split("my").join("your");
         event=event.trim();
-        message.channel.send("Set reminder to \"" +event+"\" for "+ hour+" hours,  "+minute+" minutes, and "+second+" seconds from now.");
-        this.insertReminder(message,hour,minute,second,event);
+        /* message.channel.send(moment().tz("America/Los_Angeles").format("h:mm  A")+" PDT");
+            message.channel.send(moment().tz("America/New_York").format("h:mm  A")+" EST");
+           */
+        message.channel.send("Set reminder to \"" +event+"\" at "+holiday.tz("America/Los_Angeles").format("MMMM Do YYYY, h:mm:ss a")+" PDT / "+
+        holiday.tz("America/New_York").format("MMMM Do YYYY, h:mm:ss a")+" EST, the day before "+holidayName+".");
+        this.insertHolidayReminder(message,holiday,event);
     }
-    
+    setupRelativeReminder(message,res,lowercase){
+        let hour = 0;
+        for(let i=0; i<res.length;++i){
+            if(res[i].includes("hour")){
+                if(i==0){
+                    continue;
+                }
+                hour=res[i-1];
+            if(res[i-1]=="a"){
+                hour=1;
+            }
+            break;
+        }
+    }
+    let minute = 0;
+    for(let i=0; i<res.length;++i){
+        if(res[i].includes("minute")){
+            if(i==0){
+                continue;
+            }
+            minute=res[i-1];
+            if(res[i-1]=="a"){
+                minute=1;
+            }
+            break;
+        }
+    }
+    let second = 0;
+    for(let i=0; i<res.length;++i){
+        if(res[i].includes("second")){
+            if(i==0){
+                continue;
+            }
+            second=res[i-1];
+            if(res[i-1]=="a"){
+                second=1;
+            }
+            break;
+        }
+    }
+    if(lowercase.includes("tomorrow")){
+        hour=24;
+    }
+    let found = false;
+    var event = "";
+    for(let i=0; i<res.length;++i){
+        if(res[i].includes("in")){
+            found=false;
+        }
+        if(found){
+            event= event+ res[i] + " ";
+        }
+        if(res[i].includes("to")){
+            found=true;
+        }
+
+    }
+
+
+    event=event.split("my").join("your");
+    event=event.trim();
+    message.channel.send("Set reminder to \"" +event+"\" for "+ hour+" hours,  "+minute+" minutes, and "+second+" seconds from now.");
+    this.insertReminder(message,hour,minute,second,event);
+    }
+    insertHolidayReminder(message, momentObj,event){
+        var client = this.client;
+        var url = this.url;
+        var myobj = {
+                description: event,
+                time: momentObj.valueOf(),
+                userId: message.member.user.id
+            };
+        this.dbo.collection("reminders").insertOne(myobj,(err,res)=>{
+            if (err)throw err;
+            console.log("successfully added reminder");
+        });
+    }
     insertReminder(message,hour, minute, second, event){
         var client = this.client;
         var url = this.url;
