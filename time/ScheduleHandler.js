@@ -46,7 +46,7 @@ module.exports = class Schedule extends Handler{
             if(doc==null)return;
             if(err)throw err;
             //doc._id+
-            message.channel.send(doc.description+" "+message.member.user.id);
+            message.channel.send(doc.description);
         }
     );
     }
