@@ -16,8 +16,14 @@ module.exports = class Schedule extends Handler{
                 return;
             }
             else if(day=="help"){
-                message.channel.send("Syntax for adding a person to the schedule: !schedule [day] [description] \nExample: !schedule Monday Sean\nSyntax for viewing a day's schedule: !schedule [Day]\nExample: !schedule monday\nTo reset your schedule type !schedule reset");
+                message.channel.send("Syntax for adding a person to the schedule: !schedule [day] [description] \nExample: !schedule Monday Sean\nSyntax for viewing a day's schedule: !schedule [Day]\nExample: !schedule monday\nSyntax for deleting a record: !schedule remove [id]\nExample:!schedule remove 1\nTo reset your schedule type !schedule reset");
                 return;
+            }
+            else if(day=="remove"&&tokens.length==3){
+                if(isNaN(tokens[2])){
+                    message.channel.send("Schedule: Error - "+tokens[2]+ " is not a number.");
+                }
+                removeSchedule(message,parseInt(tokens[2]));
             }
             if(tokens.length==2){
                 //get schedule
@@ -39,9 +45,18 @@ module.exports = class Schedule extends Handler{
             (err,doc)=>{
             if(doc==null)return;
             if(err)throw err;
-            message.channel.send(doc.description);
+            message.channel.send(doc._id+" "+doc.description);
         }
     );
+    }
+    removeSchedule(message, id){
+        var query = {
+            _id:id
+        };
+        this.dbo.collection("schedule").delete(query,(err,res)=>{
+            if(err)throw err;
+            message.channel.send("Successfully deleted record "+id);
+        });
     }
     setSchedule(message,dayToken,desc){
         var query = {
