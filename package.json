@@ -23,10 +23,13 @@
   "homepage": "https://github.com/seanmksha/reminder-bot#readme",
   "dependencies": {
     "discord.js": "^11.4.2",
+    "google": "^2.1.0",
+    "lodash": "^4.17.5",
     "moment": "^2.24.0",
     "moment-holiday": "^1.5.1",
     "moment-timezone": "^0.5.25",
     "mongodb": "^3.2.3",
-    "random-js": "^2.0.0"
+    "random-js": "^2.0.0",
+    "urban-dictionary": "^2.2.1"
   }
 }

@@ -3,7 +3,6 @@ module.exports= class CustomMessages extends Handler{
     constructor(client,directory){
         super(client);
         const {Random} = require("random-js");
-        this.client=client;
         this.fs = require("fs");
         this.directory=directory;
         this.content = this.fs.readFileSync(directory);

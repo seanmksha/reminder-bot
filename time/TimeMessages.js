@@ -4,18 +4,9 @@ const moment2 = require("moment-holiday");
 const Handler = require("../handler.js");
 const MongoClient = require('mongodb').MongoClient;
 module.exports= class TimeMessages extends Handler{
-    constructor(client,mongoURL){
+    constructor(client,dbo){
         super(client);
-        this.url=mongoURL;
-        MongoClient.connect(this.url,(err,db)=>{
-            if(err){
-                throw err;
-            }    
-            this.dbo = db.db("reminders");
-            setInterval(()=>
-                this.pollTimestamp()
-            ,1000,this.url);
-        });
+        this.dbo=dbo;
     }
     processChat(message){
         var client = this.client;
@@ -78,20 +69,10 @@ module.exports= class TimeMessages extends Handler{
     }
    
     pollTimestamp(backupURL){
-        if(this.dbo==null){
-            
-            MongoClient.connect(backupURL,(err,db)=>{
-                if(err){
-                    throw err;
-                }
-                
-                this.dbo = db.db("reminders");
-            });
-            return;
-        }
+      
         var client = this.client;
         this.dbo.collection("reminders").find().each((err,doc)=>{
-        
+                if(err)throw err;
                 if(doc==null)return;
                 
                 var currentTime = moment().valueOf();
