@@ -9,6 +9,7 @@ module.exports = class Schedule extends Handler{
         var lowercase = message.content.toLowerCase();
         if(lowercase.startsWith("!schedule")){
             var tokens = lowercase.split(" ");
+            var original = message.content.split(" ");
             var day = tokens[1];
             if(day=="reset"){
                 this.resetSchedule(message);
@@ -25,7 +26,7 @@ module.exports = class Schedule extends Handler{
             else{
                 var description = "";
                 for(let i=2;i<tokens.length;++i){
-                    description=description+tokens[i]+" ";
+                    description=description+original[i]+" ";
                 }
                 description=description.trim();
                 this.setSchedule(message,day,description);
