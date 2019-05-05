@@ -41,11 +41,12 @@ module.exports = class Schedule extends Handler{
     }
     getSchedule(message,dayToken){
         message.channel.send(this.getUserName(message)+"\'s "+this.capitalizeFirstLetter(dayToken)+" Schedule:");
-        this.dbo.collection("schedule").find({day:dayToken},{userId:message.member.user.id}).each(
+        this.dbo.collection("schedule").find({$and:[{day:dayToken},{userId:message.member.user.id}]}).each(
             (err,doc)=>{
             if(doc==null)return;
             if(err)throw err;
-            message.channel.send(doc._id+" "+doc.description);
+            //doc._id+
+            message.channel.send(doc.description+" "+message.member.user.id);
         }
     );
     }
