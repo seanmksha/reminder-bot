@@ -3,7 +3,18 @@ const moment = require("moment-timezone");
 const moment2 = require("moment-holiday");
 const Handler = require("../handler.js");
 const MongoClient = require('mongodb').MongoClient;
-module.exports= class TimeMessages extends Handler{
+const EST = "America/New_York";
+const DEFAULT_TIME = ""
+const dayMap = new Map([
+    ["monday",1],
+    ["tuesday",2],
+["wednesday",3],
+["thursday",4],
+["friday",5],
+["saturday",6],
+["sunday",7]
+]);
+module.exports= class TimeHandler extends Handler{
     constructor(client,dbo){
         super(client);
         this.dbo=dbo;
@@ -21,6 +32,9 @@ module.exports= class TimeMessages extends Handler{
         if(message.isMentioned(client.user)&& lowercase.includes("remind")&&lowercase.includes("me")){
             this.setupReminder(message,lowercase);
             return;
+        }
+        else if(message.isMentioned(client.user)&& lowercase.includes("!remind")){
+            this.setupDayReminder(message,lowercase);
         }
         if(message.isMentioned(client.user)&& lowercase.includes("next") && lowercase.includes("holiday")){
             var hol = moment().nextHoliday(1,false);
@@ -82,7 +96,10 @@ module.exports= class TimeMessages extends Handler{
                     
                     if(timestamp<=currentTime){
                         console.log("hit time, time to remind");
-                        client.users.get(record.userId).send("Reminder: <@"+record.userId+"> : You have to "+record.description);
+                        var user = client.users.get(record.userId);
+                        if(user!=null){
+                            user.send("Reminder: <@"+record.userId+"> : You have to "+record.description);
+                        }
                         this.dbo.collection("reminders").deleteOne({_id:record._id},(err,obj)=>{
                             if(err)throw err;
                             console.log("1 document deleted");
@@ -95,7 +112,34 @@ module.exports= class TimeMessages extends Handler{
            
         );
     }
-    
+    getMomentNextDay(day){
+        const today = moment().tz(EST).isoWeekday();
+
+        // if we haven't yet passed the day of the week that I need:
+        if (today <= day) { 
+            // then just give me this week's instance of that day
+            return moment().tz(EST).isoWeekday(day);
+        } else {
+            // otherwise, give me *next week's* instance of that s
+            
+            return moment().tz(EST).add(1, 'weeks').isoWeekday(day);
+        }
+    }
+    setupDayReminder(message, lowercase){
+        var res = lowercase.split(" ");
+        var original = message.content.split(" ");
+        var day = res[2];
+        if(day=="help"){
+            message.channel.send("Syntax for reminders given a next day: !remind [day] [description]\nFor example:!remind monday Sean has to type code\nFor relative reminders use:@ remind me [day] to [description]");
+           return;
+        }
+        var description = "";
+        for(let i=3; i<res.length;++i){
+            description= description+ original[i]+" ";
+        }
+        description=description.trim();
+        this.insertDayReminder(message,lowercase,day,description);
+    }
     setupReminder(message,lowercase){
         var res = lowercase.split(" ");
         //check for holiday
@@ -155,8 +199,7 @@ module.exports= class TimeMessages extends Handler{
         /* message.channel.send(moment().tz("America/Los_Angeles").format("h:mm  A")+" PDT");
             message.channel.send(moment().tz("America/New_York").format("h:mm  A")+" EST");
            */
-        message.channel.send("Set reminder to \"" +event+"\" at "+holiday.tz("America/Los_Angeles").format("MMMM Do YYYY, h:mm:ss a")+" PDT / "+
-        holiday.tz("America/New_York").format("MMMM Do YYYY, h:mm:ss a")+" EST, the day before "+holidayName+".");
+       
         this.insertHolidayReminder(message,holiday,event);
     }
     setupRelativeReminder(message,res,lowercase){
@@ -223,6 +266,22 @@ module.exports= class TimeMessages extends Handler{
     message.channel.send("Set reminder to \"" +event+"\" for "+ hour+" hours,  "+minute+" minutes, and "+second+" seconds from now.");
     this.insertReminder(message,hour,minute,second,event);
     }
+    insertDayReminder(message,lowercase, day,event){
+        var dayNumb = dayMap.get(day);
+        if(dayNumb==null)return;
+        var mom = this.getMomentNextDay(dayNumb).startOf('day').add(20,'hours');
+     
+        var obj = {
+            description: event,
+            time: mom.valueOf(),
+            userId:message.member.user.Id
+        }
+        this.dbo.collection("reminders").insertOne(obj,(err,res)=>{
+            if(err)throw err;
+            message.channel.send("Set reminder to \"" +event+"\" at "+mom.tz("America/Los_Angeles").format("MMMM Do YYYY, h:mm:ss a")+" PDT / "+
+            mom.tz("America/New_York").format("MMMM Do YYYY, h:mm:ss a")+" EST");
+        });
+    }
     insertHolidayReminder(message, momentObj,event){
         var client = this.client;
         var url = this.url;
@@ -234,6 +293,8 @@ module.exports= class TimeMessages extends Handler{
         this.dbo.collection("reminders").insertOne(myobj,(err,res)=>{
             if (err)throw err;
             console.log("successfully added reminder");
+            message.channel.send("Set reminder to \"" +event+"\" at "+mom.tz("America/Los_Angeles").format("MMMM Do YYYY, h:mm:ss a")+" PDT / "+
+            mom.tz("America/New_York").format("MMMM Do YYYY, h:mm:ss a")+" EST, the day before "+holidayName+".");
         });
     }
     insertReminder(message,hour, minute, second, event){

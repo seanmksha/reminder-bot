@@ -4,9 +4,9 @@ const client = new discord.Client;
 const key = require("./key.js");
 //Private messages, in gitignore
 const CustomMessages = require("./casual_messages/CustomMessages.js");
-const TimeMessages = require("./time/TimeMessages.js");
+const TimeHandler = require("./time/TimeHandler.js");
 const ScheduleHandler = require("./time/ScheduleHandler.js");
-const music = require("./music/music.js");
+const music = require("./music/MusicHandler.js");
 const AdminHandler = require("./admin/admin.js");
 var url = "mongodb://localhost:27017/AllPurposeDiscord";
 const MongoClient = require('mongodb').MongoClient;
@@ -21,7 +21,7 @@ MongoClient.connect(url,(err,db)=>{
         throw err;
     }    
     dbo = db.db("AllPurposeDiscord");
-    timeMessageClient= new TimeMessages(client,dbo);
+    timeMessageClient= new TimeHandler(client,dbo);
     scheduleHandler = new ScheduleHandler(client,dbo);
 
     
