@@ -188,13 +188,20 @@ module.exports= class TimeHandler extends Handler{
                 found=false;
             }
             if(found){
-                event= event+ res[i] + " ";
+                if(res[i]=="i"||res[i]=="I"){
+                    event=event+"You"+" ";
+                }
+                else{
+                    event= event+ res[i] + " ";
+                }
             }
-            if(res[i].includes("to")){
+            if(res[i].includes("to")||res[i].includes("that")){
                 found=true;
             }
         }
         event=event.split("my").join("your");
+        event=event.split("My").join("Your");
+        
         event=event.trim();
         /* message.channel.send(moment().tz("America/Los_Angeles").format("h:mm  A")+" PDT");
             message.channel.send(moment().tz("America/New_York").format("h:mm  A")+" EST");
@@ -204,6 +211,7 @@ module.exports= class TimeHandler extends Handler{
     }
     setupRelativeReminder(message,res,lowercase){
         let hour = 0;
+        let original = message.content.split(" ");
         for(let i=0; i<res.length;++i){
             if(res[i].includes("hour")||res[i].includes("hr")||res[i].includes("hrs")){
                 if(i==0){
@@ -252,7 +260,7 @@ module.exports= class TimeHandler extends Handler{
             found=false;
         }
         if(found){
-            event= event+ res[i] + " ";
+            event= event+ original[i] + " ";
         }
         if(res[i].includes("to")||res[i].includes("that")){
             found=true;
