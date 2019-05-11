@@ -98,7 +98,7 @@ module.exports= class TimeHandler extends Handler{
                         console.log("hit time, time to remind");
                         var user = client.users.get(record.userId);
                         if(user!=null){
-                            user.send("Reminder: <@"+record.userId+"> : You have to "+record.description);
+                            user.send("Reminder: <@"+record.userId+"> : "+record.description);
                         }
                         this.dbo.collection("reminders").deleteOne({_id:record._id},(err,obj)=>{
                             if(err)throw err;
