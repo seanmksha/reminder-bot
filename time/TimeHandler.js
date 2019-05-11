@@ -213,7 +213,8 @@ module.exports= class TimeHandler extends Handler{
         let hour = 0;
         let original = message.content.split(" ");
         for(let i=0; i<res.length;++i){
-            if(res[i].includes("hour")||res[i].includes("hr")||res[i].includes("hrs")){
+            var lowerWord = res[i].toLowerCase();
+            if(lowerWord==="hour"||lowerWord==="hours"||lowerWord==="hr"||lowerWord==="hrs"){
                 if(i==0){
                     continue;
                 }
@@ -226,7 +227,8 @@ module.exports= class TimeHandler extends Handler{
     }
     let minute = 0;
     for(let i=0; i<res.length;++i){
-        if(res[i].includes("minute")||res[i].includes("min")){
+        var lowerWord = res[i].toLowerCase();
+        if(lowerWord==="minute"||lowerWord==="minutes"||lowerWord==="min"){
             if(i==0){
                 continue;
             }
@@ -239,7 +241,8 @@ module.exports= class TimeHandler extends Handler{
     }
     let second = 0;
     for(let i=0; i<res.length;++i){
-        if(res[i].includes("second")||res[i].includes("sec")){
+        var lowerWord = res[i].toLowerCase();
+        if(lowerWord==="second"||lowerWord==="seconds"||lowerWord==="sec"){
             if(i==0){
                 continue;
             }
@@ -260,7 +263,12 @@ module.exports= class TimeHandler extends Handler{
             found=false;
         }
         if(found){
-            event= event+ original[i] + " ";
+            if(res[i]=="i"||res[i]=="I"){
+                event=event+"You"+" ";
+            }
+            else{
+                event= event+ original[i] + " ";
+            }
         }
         if(res[i].includes("to")||res[i].includes("that")){
             found=true;
@@ -269,7 +277,9 @@ module.exports= class TimeHandler extends Handler{
     }
 
 
-    event=event.split("my").join("your");
+     event=event.split("my").join("your");
+    event=event.split("My").join("Your");
+        
     event=event.trim();
     message.channel.send("Set reminder to \"" +event+"\" for "+ hour+" hours,  "+minute+" minutes, and "+second+" seconds from now.");
     this.insertReminder(message,hour,minute,second,event);
