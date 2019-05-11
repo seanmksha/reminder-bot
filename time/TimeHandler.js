@@ -184,7 +184,8 @@ module.exports= class TimeHandler extends Handler{
         var event = "";
         holiday.subtract("5","hours");
         for(let i=0; i<res.length;++i){
-            if(res[i].includes("on")||res[i].includes("in")){
+            var lowerWord = res.toLowerCase();
+            if(lowerWord==="on"||lowerWord==="in"){
                 found=false;
             }
             if(found){
@@ -195,7 +196,7 @@ module.exports= class TimeHandler extends Handler{
                     event= event+ res[i] + " ";
                 }
             }
-            if(res[i].includes("to")||res[i].includes("that")){
+            if(lowerWord==="to"||lowerWord==="that"){
                 found=true;
             }
         }
@@ -259,7 +260,8 @@ module.exports= class TimeHandler extends Handler{
     let found = false;
     var event = "";
     for(let i=0; i<res.length;++i){
-        if(res[i].includes("in")){
+        var lowerWord = res[i].toLowerCase();
+        if(lowerCase==="in"){
             found=false;
         }
         if(found){
@@ -270,7 +272,7 @@ module.exports= class TimeHandler extends Handler{
                 event= event+ original[i] + " ";
             }
         }
-        if(res[i].includes("to")||res[i].includes("that")){
+        if(lowerWord==="to"||lowerWord==="that"){
             found=true;
         }
 
@@ -281,7 +283,7 @@ module.exports= class TimeHandler extends Handler{
     event=event.split("My").join("Your");
         
     event=event.trim();
-    message.channel.send("Set reminder to \"" +event+"\" for "+ hour+" hours,  "+minute+" minutes, and "+second+" seconds from now.");
+    message.channel.send("Set reminder \"" +event+"\" for "+ hour+" hours,  "+minute+" minutes, and "+second+" seconds from now.");
     this.insertReminder(message,hour,minute,second,event);
     }
     insertDayReminder(message,lowercase, day,event){
