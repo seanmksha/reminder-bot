@@ -261,7 +261,7 @@ module.exports= class TimeHandler extends Handler{
     var event = "";
     for(let i=0; i<res.length;++i){
         var lowerWord = res[i].toLowerCase();
-        if(lowerCase==="in"){
+        if(lowerWord==="in"){
             found=false;
         }
         if(found){
