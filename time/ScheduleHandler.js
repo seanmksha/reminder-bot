@@ -4,6 +4,11 @@ module.exports = class Schedule extends Handler{
         super(client);
         this.dbo=dbo;
     }
+    /**
+     * 
+     * @param {Message} message Message the user inputted into the channel
+     * Process the chat for commands regarding scheduling 
+     */
     processChat(message){
         var client = this.client;
         var lowercase = message.content.toLowerCase();
@@ -39,6 +44,11 @@ module.exports = class Schedule extends Handler{
             }
         }
     }
+    /**
+     * 
+     * @param {Message} message the user inputted into the channel 
+     * @param {String} dayToken the day the user wants to schedule the event on 
+     */
     getSchedule(message,dayToken){
         message.channel.send(this.getUserName(message)+"\'s "+this.capitalizeFirstLetter(dayToken)+" Schedule:");
         this.dbo.collection("schedule").find({$and:[{day:dayToken},{userId:message.member.user.id}]}).each(
@@ -50,6 +60,11 @@ module.exports = class Schedule extends Handler{
         }
     );
     }
+    /**
+     * 
+     * @param {Message} message the user inputted into the channel 
+     * @param {Number} id of the record to remove
+     */
     removeSchedule(message, id){
         var query = {
             _id:id

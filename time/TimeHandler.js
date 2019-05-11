@@ -205,7 +205,7 @@ module.exports= class TimeHandler extends Handler{
     setupRelativeReminder(message,res,lowercase){
         let hour = 0;
         for(let i=0; i<res.length;++i){
-            if(res[i].includes("hour")){
+            if(res[i].includes("hour")||res[i].includes("hr")||res[i].includes("hrs")){
                 if(i==0){
                     continue;
                 }
@@ -218,7 +218,7 @@ module.exports= class TimeHandler extends Handler{
     }
     let minute = 0;
     for(let i=0; i<res.length;++i){
-        if(res[i].includes("minute")){
+        if(res[i].includes("minute")||res[i].includes("min")){
             if(i==0){
                 continue;
             }
@@ -231,7 +231,7 @@ module.exports= class TimeHandler extends Handler{
     }
     let second = 0;
     for(let i=0; i<res.length;++i){
-        if(res[i].includes("second")){
+        if(res[i].includes("second")||res[i].includes("sec")){
             if(i==0){
                 continue;
             }
@@ -254,7 +254,7 @@ module.exports= class TimeHandler extends Handler{
         if(found){
             event= event+ res[i] + " ";
         }
-        if(res[i].includes("to")){
+        if(res[i].includes("to")||res[i].includes("that")){
             found=true;
         }
 
