@@ -15,7 +15,7 @@ module.exports = class AdminHandler extends Handler{
         }
     }
 
-    processChat(message){
+    async processChat(message){
         if(!this.isAdmin(message)){
             return;
         }
@@ -27,6 +27,14 @@ module.exports = class AdminHandler extends Handler{
            );
            message.channel.send("Reloading Messages");
            return;     
+            }
+            if(message.content.startsWith("!say")){
+                var phrases = message.content.split(" ");
+                var chan = this.client.channels.get(phrases[1]);
+                if(chan){
+                    var mes = phrases.slice(2,phrases.length).join(" ");
+                    chan.send(mes);
+                }
             }
            
         }

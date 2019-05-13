@@ -49,7 +49,6 @@ client.on("message", message => {
     if(timeMessageClient!=null){
         timeMessageClient.processChat(message);
     }
-
     secretMessageClient.processChat(message);
     musicHandler.processChat(message);
 });
