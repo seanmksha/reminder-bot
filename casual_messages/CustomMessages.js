@@ -24,7 +24,7 @@ module.exports= class CustomMessages extends Handler{
 
     
 
-    processChat(message){
+    async processChat(message){
         var messages = this.jsonContent.messages;
         var client = this.client;
         for(let i=0; i< messages.length;++i){

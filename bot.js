@@ -1,20 +1,27 @@
 const discord = require("discord.js");
+const {
+    prefix,
+    key
+} = require('./config.json');
 const client = new discord.Client;
-//Create a file key.js that exports your discord token
-const key = require("./key.js");
 //Private messages, in gitignore
 const CustomMessages = require("./casual_messages/CustomMessages.js");
 const TimeHandler = require("./time/TimeHandler.js");
 const ScheduleHandler = require("./time/ScheduleHandler.js");
-const music = require("./music/MusicHandler.js");
+const MusicHandler = require("./music/MusicHandler.js");
 const AdminHandler = require("./admin/admin.js");
-var url = "mongodb://localhost:27017/AllPurposeDiscord";
+
+
+const url = "mongodb://localhost:27017/AllPurposeDiscord";
 const MongoClient = require('mongodb').MongoClient;
 
 var secretMessageClient = new CustomMessages(client,"./casual_messages/privateMessage.json");
+var adminClient = new AdminHandler(client,secretMessageClient);
 var timeMessageClient;
 var scheduleHandler;
-var adminClient = new AdminHandler(client,secretMessageClient);
+var musicHandler;
+
+
 var dbo;
 MongoClient.connect(url,(err,db)=>{
     if(err){
@@ -23,7 +30,7 @@ MongoClient.connect(url,(err,db)=>{
     dbo = db.db("AllPurposeDiscord");
     timeMessageClient= new TimeHandler(client,dbo);
     scheduleHandler = new ScheduleHandler(client,dbo);
-
+    musicHandler = new MusicHandler(client,dbo);
     
     setInterval(()=>
         timeMessageClient.pollTimestamp()
@@ -31,7 +38,8 @@ MongoClient.connect(url,(err,db)=>{
 });
 
 client.on("message", message => {
-    if(message.author.id==client.user.id || message.member==null){
+
+    if(message.author.bot|| message.author.id==client.user.id || message.member==null){
         return;
     }
     adminClient.processChat(message);
@@ -43,7 +51,7 @@ client.on("message", message => {
     }
 
     secretMessageClient.processChat(message);
-    music.chat(message,client);
+    musicHandler.processChat(message);
 });
 
 client.on("guildMemberAdd", member=>{

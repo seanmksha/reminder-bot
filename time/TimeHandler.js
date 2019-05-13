@@ -19,7 +19,7 @@ module.exports= class TimeHandler extends Handler{
         super(client);
         this.dbo=dbo;
     }
-    processChat(message){
+    async processChat(message){
         var client = this.client;
         var lowercase = message.content.toLowerCase();
         if(lowercase.includes("what")&& lowercase.includes("time")&&

@@ -9,7 +9,7 @@ module.exports = class Schedule extends Handler{
      * @param {Message} message Message the user inputted into the channel
      * Process the chat for commands regarding scheduling 
      */
-    processChat(message){
+    async processChat(message){
         var client = this.client;
         var lowercase = message.content.toLowerCase();
         if(lowercase.startsWith("!schedule")){
