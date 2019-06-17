@@ -19,7 +19,7 @@ module.exports= class CustomMessages extends Handler{
     attachIsImage(msgAttach) {
         var url = msgAttach.url;
         return ((url.indexOf("png", url.length - "png".length /*or 3*/) !== -1)||(url.indexOf("jpg",url.length-"jpg".length)!==-1)||
-        (url.indexOf("jpeg",url.length-"jpeg".length)!==-1));
+        (url.indexOf("jpeg",url.length-"jpeg".length)!==-1)||(url.indexOf("gif",url.length-"gif".length)!==-1));
     }
 
     
