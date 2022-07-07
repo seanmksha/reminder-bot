@@ -26,7 +26,7 @@
     "ffmpeg-binaries": "^4.0.0",
     "google": "^2.1.0",
     "lodash": "^4.17.5",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "moment-holiday": "^1.5.1",
     "moment-timezone": "^0.5.25",
     "mongodb": "^3.2.3",
